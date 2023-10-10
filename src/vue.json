@@ -1,0 +1,10 @@
+{
+  "pages": [
+    {
+      "name": "App",
+      "sourceJs": "main.js",
+      "sourceHtml": "App.html",
+      "dist": "App.html"
+    }
+  ]
+}
