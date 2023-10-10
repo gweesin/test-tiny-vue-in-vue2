@@ -1,7 +1,6 @@
 "use strict";
 const path = require("path");
 const utils = require("./utils");
-const files = require("./files");
 const webpack = require("webpack");
 const _ = require("lodash");
 const config = require("../config");
@@ -75,13 +74,7 @@ let pluginsConfig = [
 const extPath = path.join(__dirname, "../src/release_ext");
 let vueConfig = utils.readVueConfig();
 let pages = vueConfig.pages;
-if (!fs.existsSync(extPath)) {
-  fs.mkdirSync(extPath);
-} else {
-  files.rmTreeSync(extPath, true);
-}
 const srPath = path.join(__dirname, "../src");
-const entry = baseWebpackConfig.entry;
 _.each(pages, function (pObj) {
   let sPath = path.join(srPath, pObj.sourceHtml);
   let dPath = path.join(extPath, pObj.dist);
