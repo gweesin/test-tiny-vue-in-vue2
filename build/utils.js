@@ -2,17 +2,6 @@
 const path = require("path");
 const fs = require("fs");
 const _ = require("lodash");
-const config = require("../config");
-const packageConfig = require("../package.json");
-
-exports.assetsPath = function (_path) {
-  const assetsSubDirectory =
-    process.env.NODE_ENV === "production"
-      ? config.build.assetsSubDirectory
-      : config.dev.assetsSubDirectory;
-
-  return path.posix.join(assetsSubDirectory, _path);
-};
 
 exports.cssLoaders = function (options) {
   options = options || {};
@@ -45,11 +34,6 @@ exports.cssLoaders = function (options) {
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
-    less: generateLoaders("less"),
-    sass: generateLoaders("sass", { indentedSyntax: true }),
-    scss: generateLoaders("sass"),
-    stylus: generateLoaders("stylus"),
-    styl: generateLoaders("stylus"),
   };
 };
 
