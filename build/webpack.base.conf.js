@@ -5,9 +5,6 @@ const utils = require("./utils");
 const _ = require("lodash");
 const config = require("../config");
 const vueLoaderConfig = require("./vue-loader.conf");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackBar = require("webpackbar");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 function resolve(dir) {
   return path.join(__dirname, "..", dir);
@@ -45,10 +42,6 @@ if (!isProduct && needEntry.length) {
 let webpackConfig = {
   context: path.resolve(__dirname, "../"),
   entry: entry,
-  stats: "errors-only",
-  infrastructureLogging: {
-    level: "error",
-  },
   output: {
     path: config.build.assetsRoot,
     filename: "[name].js",
@@ -61,15 +54,6 @@ let webpackConfig = {
     alias: {
       vue$: "vue/dist/vue.esm.js",
       "@": resolve("src"),
-    },
-    fallback: {
-      setImmediate: false,
-      dgram: false,
-      fs: false,
-      net: false,
-      tls: false,
-      child_process: false,
-      util: false,
     },
     mainFields: ["main", "module"],
   },
@@ -103,7 +87,7 @@ let webpackConfig = {
         test: /\.s[ac]ss$/i,
         exclude: /\.d\.scss$/i,
         use: [
-          isProduct ? MiniCssExtractPlugin.loader : "style-loader",
+          "style-loader",
           "css-loader",
           {
             loader: "sass-loader",
@@ -120,21 +104,12 @@ let webpackConfig = {
       },
       {
         test: /\.css$/,
-        use: [
-          isProduct ? MiniCssExtractPlugin.loader : "style-loader",
-          "css-loader",
-        ],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.html$/i,
         loader: "html-loader",
       },
-      // {
-      //     test: /\.js$/,
-      //     use: ['happypack/loader?id=babel'],
-      //     // loader: 'happypack/loader?id=babel',
-      //     include: [resolve('src'), resolve('node_modules/webpack-dev-server/client')]
-      // },
       {
         test: /\.(png|jpe?g|gif|svg|cur)(\?.*)?$/,
         type: "asset/resource",
@@ -154,20 +129,6 @@ let webpackConfig = {
         type: "asset/inline",
       },
     ],
-  },
-  plugins: [
-    // 进度条
-    new WebpackBar(),
-
-    new CleanWebpackPlugin(),
-  ],
-
-  cache: {
-    type: "filesystem",
-  },
-
-  snapshot: {
-    managedPaths: [],
   },
 };
 

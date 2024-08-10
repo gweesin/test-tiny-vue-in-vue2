@@ -8,19 +8,9 @@ const path = require("path");
 const fs = require("fs");
 const baseWebpackConfig = require("./webpack.base.conf");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const FriendlyErrorsPlugin = require("@soda/friendly-errors-webpack-plugin");
 const portfinder = require("portfinder");
 const { VueLoaderPlugin } = require("vue-loader");
 const HappyPack = require("happypack");
-const os = require("os");
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const createHappyPlugin = (id, loaders) =>
-  new HappyPack({
-    id: id,
-    loaders: loaders,
-    threadPool: happyThreadPool,
-    verbose: process.env.HAPPY_VERBOSE === "1", // make happy more verbose with HAPPY_VERBOSE=1
-  });
 
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
@@ -33,22 +23,13 @@ let pluginsConfig = [
   }),
   new VueLoaderPlugin(),
 
-  // createHappyPlugin('babel', [
-  //     {
-  //         loader: 'babel-loader',
-  //         options: {
-  //             babelrc: true,
-  //             cacheDirectory: true // 启用缓存
-  //         }
-  //     }
-  // ]),
   new HappyPack({
     loaders: [
       {
         path: "vue-loader",
         query: {
           loaders: {
-            scss: "vue-style-loader!css-loader!postcss-loader!sass-loader?indentedSyntax",
+            scss: "vue-style-loader!css-loader!sass-loader?indentedSyntax",
           },
         },
       },
@@ -144,20 +125,6 @@ module.exports = new Promise((resolve, reject) => {
       process.env.PORT = port;
       // add port to devServer config
       devWebpackConfig.devServer.port = port;
-
-      // Add FriendlyErrorsPlugin
-      devWebpackConfig.plugins.push(
-        new FriendlyErrorsPlugin({
-          compilationSuccessInfo: {
-            messages: [
-              `Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`,
-            ],
-          },
-          onErrors: config.dev.notifyOnErrors
-            ? utils.createNotifierCallback()
-            : undefined,
-        })
-      );
 
       resolve(devWebpackConfig);
     }
